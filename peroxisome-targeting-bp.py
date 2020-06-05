@@ -3,15 +3,20 @@ from Bio import SeqIO
 import pandas as pd
 import glob
 
-filelist = glob.glob(r'C:\Users\jdeed\OneDrive - University of Exeter\Peroxisome-Targeted BPs\Bacterial sequence files\mycobacteria protein fasta files\test' 
-          + "/*protein.faa.gz")
-
+# input folder
+inputfolder = r'C:\Users\jdeed\OneDrive - University of Exeter\Peroxisome-Targeted BPs\Bacterial sequence files\mycobacteria protein fasta files\ncbi-genomes-2020-06-03'
+#output folder
+outputpath = r'C:\Users\jdeed\OneDrive - University of Exeter\Peroxisome-Targeted BPs\Bacterial sequence files\mycobacteria protein fasta files\ncbi-genomes-2020-06-03'
+# output filename
+outputname = 'mycobacterial_positive_SKL'
+# make empty df to append results to
 collateddfcolumns = ["Identifyer","Sequence"]
 collated_df = pd.DataFrame(columns = collateddfcolumns)
-collated_df.set_index("Identifyer", inplace = True)
-print(collated_df)
-
-for file in filelist:     
+# retrieve list of files using glob method
+filelist = glob.glob(inputfolder + "/*protein.faa.gz")
+print(filelist)
+for i, file in enumerate(filelist):     
+    print ('Processing file {} of {}'.format(i+1, len(filelist)))
     # open a list for the identifyer and for the sequence
     identifyer = []
     sequence = []
@@ -26,9 +31,13 @@ for file in filelist:
     #append to a df then change column names and set the index to the identifyer
     df = pd.DataFrame(data = [identifyer,sequence]).T
     df.columns = ['Identifyer','Sequence']
-    df.set_index("Identifyer", inplace = True)
     SKLmask = df["Sequence"].str.upper().str.endswith("SKL")
     skldf = df[SKLmask]
-    print (skldf)
-    collated_df.append(skldf)           
+    # note that pandas append does not happen 'inplace' and so needs to have 
+    # it specified that you want to replace the original object with the new 
+    # object
+    collated_df = collated_df.append(skldf) 
 print(collated_df)
+# export to .csv
+collated_df.to_csv('{}/{}.csv'.format(outputpath,outputname), index = None, header = True)          
+
