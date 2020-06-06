@@ -4,13 +4,13 @@ import pandas as pd
 import glob
 
 # input folder
-inputfolder = r'C:\Users\jdeed\OneDrive - University of Exeter\Peroxisome-Targeted BPs\Bacterial sequence files\test'
+inputfolder = r'D:\Bacterial Protein Sequences\ncbi-genomes-2020-06-05'
 #output folder
-outputpath = r'C:\Users\jdeed\OneDrive - University of Exeter\Peroxisome-Targeted BPs\Bacterial sequence files\test'
+outputpath = r'D:\Bacterial Protein Sequences\ncbi-genomes-2020-06-05'
 # output filename
-outputname = 'test_positive_SKL'
+outputname = 'Bacterial_proteins_positive_SKL'
 # make empty df to append results to
-collateddfcolumns = ["Identifyer","Sequence","Description"]
+collateddfcolumns = ["Identifyer","Description","Sequence"]
 collated_df = pd.DataFrame(columns = collateddfcolumns)
 # retrieve list of files using glob method
 filelist = glob.glob(inputfolder + "/*protein.faa.gz")
@@ -31,10 +31,12 @@ for i, file in enumerate(filelist):
             sequence.append(str(record.seq))
             description.append(record.description)
     #append to a df then change column names and set the index to the identifyer
-    df = pd.DataFrame(data = [identifyer,sequence, description]).T
-    df.columns = ['Identifyer','Sequence','Description']
+    # note that .T transposes the data 
+    df = pd.DataFrame(data = [identifyer,description,sequence]).T
+    df.columns = ['Identifyer','Description','Sequence']
     SKLmask = df["Sequence"].str.upper().str.endswith("SKL")
     skldf = df[SKLmask]
+    print(skldf)
     # note that pandas append does not happen 'inplace' and so needs to have 
     # it specified that you want to replace the original object with the new 
     # object
