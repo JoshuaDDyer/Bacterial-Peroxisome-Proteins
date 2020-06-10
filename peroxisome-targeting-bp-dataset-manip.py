@@ -3,7 +3,10 @@ pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 
-df = pd.read_csv(r'C:/Users/jdeed/OneDrive - University of Exeter/Peroxisome-Targeted BPs/Bacterial sequence files/2020-06-05 Bacterial_proteins_positive_SKL.csv')
+outputpath = r'C:\Users\jdeed\OneDrive - University of Exeter\Peroxisome-Targeted BPs\Bacterial sequence files'
+outputname = '2020-06-05 Bacterial_proteins_positive_SKL (Processed)'
+
+df = pd.read_csv(r'C:/Users/jdeed/OneDrive - University of Exeter/Peroxisome-Targeted BPs/Bacterial sequence files/2020-06-05 Bacterial_proteins_positive_SKL (Original).csv')
 description = df["Description"]
 # To remove the gene name in the description column I used i.split with the
 # maxsplit parameter set to '1', and removed the first character
@@ -22,4 +25,19 @@ df['Description'] = newdescription
 descriptionseries = df['Description']
 descriptionseries = descriptionseries.apply(lambda st: st[st.find('[')+1:st.find("]")])
 df['Species'] = descriptionseries
+
 # remove bacterial names from description to make for better reading
+# https://stackoverflow.com/questions/20894525/how-to-remove-parentheses-and-all-data-within-using-pandas-python
+descriptionseries1 = df['Description']
+descriptionseries1 = descriptionseries1.str.replace(r"\[.*\]","")
+df['Description'] = descriptionseries1
+#Remove the "MULTISPECIES: " mark
+descriptionseries2 = df['Description']
+descriptionseries2 = descriptionseries2.str.replace("MULTISPECIES: ","")
+# Remove all rows with duplicate values - I want to do this based on 
+# the gene nae, nothing else
+df.sort_values("Identifyer",inplace = True)
+df.drop_duplicates(subset = "Identifyer", keep = False, inplace = True)
+print(df)
+
+df.to_csv('{}/{}.csv'.format(outputpath,outputname), index = None, header = True,)
