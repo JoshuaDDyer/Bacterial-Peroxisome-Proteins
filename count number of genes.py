@@ -28,8 +28,7 @@ for i, file in enumerate(filelist):
     genesperfile = len(genelist)
     # add this number to counter
     genecounter = genecounter + genesperfile
-
-# convert number of genes to a series for easy export
+# convert number of genes to a pandas series for easy export
 genenumberseries = pd.Series(genecounter)
 # save this series containing every bacterial gene
 genenumberseries.to_csv("{}/{}.csv".format(outputpath,outputname), header = True, index = None)

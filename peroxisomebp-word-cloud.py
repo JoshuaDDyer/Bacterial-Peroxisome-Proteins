@@ -20,7 +20,10 @@ df = pd.read_csv(file)
 df = df.dropna()
 # join all words into single string, necessary to convert all to same case 
 # (lower here)
-all_bacterial_descriptions = ' '.join(df['Description'].str.lower())
+all_bacterial_descriptions = ''.join(df['Description'].str.lower())
+print(all_bacterial_descriptions)
+
+
 
 #add stopwords (i.e. words I don't want to include to the STOPWORDS parameter)
 
