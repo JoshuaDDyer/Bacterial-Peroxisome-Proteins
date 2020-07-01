@@ -9,9 +9,9 @@ pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 import numpy as np
 
-file = r'C:/Users/jdeed/OneDrive - University of Exeter/Peroxisome-Targeted BPs/Bacterial sequence files/2020-06-05 Bacterial_proteins_positive_SKL (Processed).csv'
-outputlocation = r''
-ouputname = r''
+file = r'C:/Users/jdeed/OneDrive - University of Exeter/Results/Peroxisome-Targeted BPs/Bacterial sequence files/2020-06-05 Bacterial_proteins_positive_SKL (Processed).csv'
+outputlocation = r'C:\Users\jdeed\OneDrive - University of Exeter\Results\Peroxisome-Targeted BPs\Bacterial sequence files'
+outputname = 'SKL_Description_Cloud'
 df = pd.read_csv(file)
 
 # joining all of the words into a single string does not work if there
@@ -46,3 +46,5 @@ rcParams['figure.figsize'] = 10,20
 plt.imshow(wordcloud)
 plt.axis("off")
 plt.show()
+
+wordcloud.to_file('{}/{}.png'.format(outputlocation,outputname))
